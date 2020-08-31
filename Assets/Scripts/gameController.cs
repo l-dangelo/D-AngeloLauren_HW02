@@ -11,6 +11,11 @@ public class gameController : MonoBehaviour
         {
             restartLvl();
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     void restartLvl()
