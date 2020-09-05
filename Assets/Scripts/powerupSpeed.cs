@@ -10,6 +10,7 @@ public class powerupSpeed : MonoBehaviour
 
     [Header("Setup")]
     [SerializeField] GameObject _visualsGoBye = null;
+    //[SerializeField] ParticleSystem _particles = null;
 
     Collider _colliderGoBye = null;
     bool _poweredUp = false;
@@ -59,21 +60,22 @@ public class powerupSpeed : MonoBehaviour
         pShip?.SetBoosters(false);
     }
 
-    void DisableObject()
-    {
-        _colliderGoBye.enabled = false;
-
-        _visualsGoBye.SetActive(false);
-
-        //TODO particle flash/audio
-    }
-
     void EnableObject()
     {
         _colliderGoBye.enabled = true;
 
         _visualsGoBye.SetActive(true);
 
-        //TODO particle flash/audio
+        // TODO make sure they don't play on start _particles?.Play();
     }
+
+    void DisableObject()
+    {
+        _colliderGoBye.enabled = false;
+
+        _visualsGoBye.SetActive(false);
+
+        // TODO make sure they don't play on start _particles?.Play();
+    }
+       
 }
