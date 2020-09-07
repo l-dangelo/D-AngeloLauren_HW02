@@ -25,36 +25,28 @@ public class powerupInvisible : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerShip pShip = other.gameObject.GetComponent<PlayerShip>();
-
-        if(pShip != null && _poweredUp == false)
-        {
-            StartCoroutine(PowerupSequence(pShip));
-        }
+        StartCoroutine(PowerupSequence());
     }
-
-    IEnumerator PowerupSequence(PlayerShip pShip)
+    
+    IEnumerator PowerupSequence()
     {
         _poweredUp = true;
 
-        ActivatePowerUp(pShip);
+        ActivatePowerUp();
         DisableObject();
 
         yield return new WaitForSeconds(_puLength);
 
-        DeactivatePowerUp(pShip);
+        DeactivatePowerUp();
         EnableObject();
 
         _poweredUp = false;
     }
 
-    void ActivatePowerUp(PlayerShip pShip)
+    void ActivatePowerUp()
     {
-        Transform pship = gameObject.transform;
-
-        foreach (Transform child in pship)
+        foreach (GameObject childObj in children)
         {
-            GameObject childObj = child.gameObject;
             MeshRenderer childRenderer = childObj.GetComponent<MeshRenderer>();
 
             Color childColor = childRenderer.material.color;
@@ -63,13 +55,10 @@ public class powerupInvisible : MonoBehaviour
         }
     }
 
-    void DeactivatePowerUp(PlayerShip pShip)
+    void DeactivatePowerUp()
     {
-        Transform pship = gameObject.transform;
-
-        foreach (Transform child in pship)
+        foreach (GameObject childObj in children)
         {
-            GameObject childObj = child.gameObject;
             MeshRenderer childRenderer = childObj.GetComponent<MeshRenderer>();
 
             Color childColor = childRenderer.material.color;
