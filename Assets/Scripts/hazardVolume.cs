@@ -11,6 +11,8 @@ public class hazardVolume : MonoBehaviour
         if(playShip != null)
         {
             playShip.kill();
+
+            other.GetComponent<AudioSource>().Play(); //TODO fix audio, make sure it plays when it collides
         }
     }
 }

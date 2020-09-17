@@ -5,19 +5,22 @@ using UnityEngine;
 public class powerupSpeed : MonoBehaviour
 {
     [Header("Powerup Settings")]
-    [SerializeField] float _goFAST = 20;
-    [SerializeField] float _goFASTLength = 5;
+    [SerializeField] float _speedChange = 20;
+    [SerializeField] float _powerupLength = 5;
 
     [Header("Setup")]
-    [SerializeField] GameObject _visualsGoBye = null;
-    //[SerializeField] ParticleSystem _particles = null;
+    [SerializeField] GameObject _visualsToDisappear = null;
+    [SerializeField] ParticleSystem _particles = null;
+    [SerializeField] AudioSource _powerUpSound = null;
+    [SerializeField] AudioSource _powerDownSound = null;
 
-    Collider _colliderGoBye = null;
+    Collider _colliderToDisappear = null;
     bool _poweredUp = false;
 
     private void Awake()
     {
-        _colliderGoBye = GetComponent<Collider>();
+        _colliderToDisappear = GetComponent<Collider>();
+        _particles.Stop();
         EnableObject();
     }
 
@@ -38,7 +41,7 @@ public class powerupSpeed : MonoBehaviour
         ActivatePowerup(pShip);
         DisableObject();
 
-        yield return new WaitForSeconds(_goFASTLength);
+        yield return new WaitForSeconds(_powerupLength);
 
         DeactivatePowerup(pShip);
         EnableObject();
@@ -48,34 +51,37 @@ public class powerupSpeed : MonoBehaviour
 
     void ActivatePowerup(PlayerShip pShip)
     {
-            pShip?.SetSpeed(_goFAST);
+        pShip?.SetSpeed(_speedChange);
 
-            pShip?.SetBoosters(true);
+        pShip?.SetBoosters(true);
+
+        _powerUpSound.Play();
     }
 
     void DeactivatePowerup(PlayerShip pShip)
     {
-        pShip?.SetSpeed(-_goFAST);
+        pShip?.SetSpeed(-_speedChange);
 
         pShip?.SetBoosters(false);
+
+        _powerDownSound.Play();
     }
 
     void EnableObject()
     {
-        _colliderGoBye.enabled = true;
+        _colliderToDisappear.enabled = true;
 
-        _visualsGoBye.SetActive(true);
+        _visualsToDisappear.SetActive(true);
 
-        // TODO make sure they don't play on start _particles?.Play();
+        _particles?.Play();
     }
 
     void DisableObject()
     {
-        _colliderGoBye.enabled = false;
+        _colliderToDisappear.enabled = false;
 
-        _visualsGoBye.SetActive(false);
+        _visualsToDisappear.SetActive(false);
 
-        // TODO make sure they don't play on start _particles?.Play();
+        _particles?.Play();
     }
-       
 }

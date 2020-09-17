@@ -5,21 +5,22 @@ using UnityEngine;
 public class powerupInvisible : MonoBehaviour
 {
     [Header("Powerup Settings")]
-    [SerializeField] float _howInvisible = 0;/*0-255 or 0-100?*/
     [SerializeField] float _puLength = 5;
+    [SerializeField] float _howInvisible = 0;
 
     [Header("Setup")]
-    [SerializeField] GameObject _visualsGoBye = null;
+    [SerializeField] GameObject __visualsToDisappear = null;
+    [SerializeField] AudioSource _powerUpSound = null;
+    [SerializeField] AudioSource _powerDownSound = null;
 
     [Header("Ship Parts to Disappear")]
     [SerializeField] GameObject[] children = null;
 
-    Collider _colliderGoBye = null;
-    bool _poweredUp = false;
+    Collider _colliderToDisappear = null;
 
     private void Awake()
     {
-        _colliderGoBye = GetComponent<Collider>();
+        _colliderToDisappear = GetComponent<Collider>();
         EnableObject();
     }
 
@@ -30,8 +31,6 @@ public class powerupInvisible : MonoBehaviour
     
     IEnumerator PowerupSequence()
     {
-        _poweredUp = true;
-
         ActivatePowerUp();
         DisableObject();
 
@@ -39,45 +38,45 @@ public class powerupInvisible : MonoBehaviour
 
         DeactivatePowerUp();
         EnableObject();
-
-        _poweredUp = false;
     }
 
     void ActivatePowerUp()
     {
         foreach (GameObject childObj in children)
         {
-            MeshRenderer childRenderer = childObj.GetComponent<MeshRenderer>();
-
-            Color childColor = childRenderer.material.color;
+            MeshRenderer childRender = childObj.GetComponent<MeshRenderer>();
+            Color childColor = childRender.material.color;
             childColor.a = _howInvisible;
-            childRenderer.material.color = childColor;
+            childRender.material.color = childColor;
         }
+
+        _powerUpSound.Play();
     }
 
     void DeactivatePowerUp()
     {
         foreach (GameObject childObj in children)
         {
-            MeshRenderer childRenderer = childObj.GetComponent<MeshRenderer>();
-
-            Color childColor = childRenderer.material.color;
-            childColor.a = 255;
-            childRenderer.material.color = childColor;
+            MeshRenderer childRender = childObj.GetComponent<MeshRenderer>();
+            Color childColor = childRender.material.color;
+            childColor.a = 1;
+            childRender.material.color = childColor;
         }
+
+        _powerDownSound.Play();
     }
 
     void EnableObject()
     {
-        _colliderGoBye.enabled = true;
+        _colliderToDisappear.enabled = true;
 
-        _visualsGoBye.SetActive(true);
+        __visualsToDisappear.SetActive(true);
     }
 
     void DisableObject()
     {
-        _colliderGoBye.enabled = false;
+        _colliderToDisappear.enabled = false;
 
-        _visualsGoBye.SetActive(false);
+        __visualsToDisappear.SetActive(false);
     }
 }
