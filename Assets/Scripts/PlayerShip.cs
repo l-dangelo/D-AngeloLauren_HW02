@@ -10,8 +10,6 @@ public class PlayerShip : MonoBehaviour
 
     [Header("Feedback")]
     [SerializeField] TrailRenderer _tRail = null;
-    [SerializeField] ParticleSystem _deathEffect = null;
-    [SerializeField] AudioSource _shipSound = null;
 
     Rigidbody rb = null;
 
@@ -46,14 +44,11 @@ public class PlayerShip : MonoBehaviour
     {
         Debug.Log("Player has been killed!");
         this.gameObject.SetActive(false);
-
-        _deathEffect.Play();
     }
 
     public void SetSpeed(float speedChange)
     {
         _moveSpeed += speedChange;
-        _shipSound.Play();
     }
 
     public void SetBoosters(bool active)

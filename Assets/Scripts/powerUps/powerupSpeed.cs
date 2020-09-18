@@ -11,8 +11,6 @@ public class powerupSpeed : MonoBehaviour
     [Header("Setup")]
     [SerializeField] GameObject _visualsToDisappear = null;
     [SerializeField] ParticleSystem _particles = null;
-    [SerializeField] AudioSource _powerUpSound = null;
-    [SerializeField] AudioSource _powerDownSound = null;
 
     Collider _colliderToDisappear = null;
     bool _poweredUp = false;
@@ -54,8 +52,6 @@ public class powerupSpeed : MonoBehaviour
         pShip?.SetSpeed(_speedChange);
 
         pShip?.SetBoosters(true);
-
-        _powerUpSound.Play();
     }
 
     void DeactivatePowerup(PlayerShip pShip)
@@ -63,8 +59,6 @@ public class powerupSpeed : MonoBehaviour
         pShip?.SetSpeed(-_speedChange);
 
         pShip?.SetBoosters(false);
-
-        _powerDownSound.Play();
     }
 
     void EnableObject()

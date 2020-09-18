@@ -6,15 +6,15 @@ public class powerupInvisible : MonoBehaviour
 {
     [Header("Powerup Settings")]
     [SerializeField] float _puLength = 5;
-    [SerializeField] float _howInvisible = 0;
 
     [Header("Setup")]
-    [SerializeField] GameObject __visualsToDisappear = null;
-    [SerializeField] AudioSource _powerUpSound = null;
-    [SerializeField] AudioSource _powerDownSound = null;
+    [SerializeField] GameObject _visualsToDisappear = null;
+    [SerializeField] Material _originalMaterial = null;
+    [SerializeField] Material _invisibleMaterial = null;
 
     [Header("Ship Parts to Disappear")]
-    [SerializeField] GameObject[] children = null;
+    [SerializeField] GameObject _pShip = null;
+    [SerializeField] GameObject[] _children = null;
 
     Collider _colliderToDisappear = null;
 
@@ -42,41 +42,33 @@ public class powerupInvisible : MonoBehaviour
 
     void ActivatePowerUp()
     {
-        foreach (GameObject childObj in children)
+        _pShip.GetComponent<BoxCollider>().enabled = false;
+        foreach (GameObject childObj in _children)
         {
-            MeshRenderer childRender = childObj.GetComponent<MeshRenderer>();
-            Color childColor = childRender.material.color;
-            childColor.a = _howInvisible;
-            childRender.material.color = childColor;
+            childObj.GetComponent<MeshRenderer>().material = _invisibleMaterial;
         }
-
-        _powerUpSound.Play();
     }
 
     void DeactivatePowerUp()
     {
-        foreach (GameObject childObj in children)
+        _pShip.GetComponent<BoxCollider>().enabled = true;
+        foreach (GameObject childObj in _children)
         {
-            MeshRenderer childRender = childObj.GetComponent<MeshRenderer>();
-            Color childColor = childRender.material.color;
-            childColor.a = 1;
-            childRender.material.color = childColor;
+            childObj.GetComponent<MeshRenderer>().material = _originalMaterial;
         }
-
-        _powerDownSound.Play();
     }
 
     void EnableObject()
     {
         _colliderToDisappear.enabled = true;
 
-        __visualsToDisappear.SetActive(true);
+        _visualsToDisappear.SetActive(true);
     }
 
     void DisableObject()
     {
         _colliderToDisappear.enabled = false;
 
-        __visualsToDisappear.SetActive(false);
+        _visualsToDisappear.SetActive(false);
     }
 }
