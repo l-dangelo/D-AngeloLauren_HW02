@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerShip : MonoBehaviour
@@ -10,6 +11,7 @@ public class PlayerShip : MonoBehaviour
 
     [Header("Feedback")]
     [SerializeField] TrailRenderer _tRail = null;
+    [SerializeField] ParticleSystem _deathParts = null;
 
     Rigidbody rb = null;
 
@@ -43,7 +45,22 @@ public class PlayerShip : MonoBehaviour
     public void kill()
     {
         Debug.Log("Player has been killed!");
-        this.gameObject.SetActive(false);
+
+        _deathParts.transform.position = this.transform.position;
+        _deathParts.Play();
+
+        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        this.GetComponent<MeshRenderer>().enabled = false;
+
+        StartCoroutine(RestartGame());
+    }
+
+    IEnumerator RestartGame()
+    {
+        yield return new WaitForSeconds(2);
+
+        int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(activeSceneIndex);
     }
 
     public void SetSpeed(float speedChange)

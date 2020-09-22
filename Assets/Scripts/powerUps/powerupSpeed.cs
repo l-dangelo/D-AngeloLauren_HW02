@@ -12,14 +12,18 @@ public class powerupSpeed : MonoBehaviour
     [SerializeField] GameObject _visualsToDisappear = null;
     [SerializeField] ParticleSystem _particles = null;
 
+    [Header("Audio")]
+    [SerializeField] AudioClip _winSound = null;
+    [SerializeField] float _volume = 0;
+
     Collider _colliderToDisappear = null;
     bool _poweredUp = false;
 
     private void Awake()
     {
         _colliderToDisappear = GetComponent<Collider>();
-        _particles.Stop();
         EnableObject();
+        _particles.Pause();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -49,9 +53,12 @@ public class powerupSpeed : MonoBehaviour
 
     void ActivatePowerup(PlayerShip pShip)
     {
-        pShip?.SetSpeed(_speedChange);
+        _particles.Play();
 
+        pShip?.SetSpeed(_speedChange);
         pShip?.SetBoosters(true);
+
+        AudioHelper.PlayClip2D(_winSound, _volume);
     }
 
     void DeactivatePowerup(PlayerShip pShip)
@@ -66,8 +73,6 @@ public class powerupSpeed : MonoBehaviour
         _colliderToDisappear.enabled = true;
 
         _visualsToDisappear.SetActive(true);
-
-        _particles?.Play();
     }
 
     void DisableObject()
@@ -75,7 +80,5 @@ public class powerupSpeed : MonoBehaviour
         _colliderToDisappear.enabled = false;
 
         _visualsToDisappear.SetActive(false);
-
-        _particles?.Play();
     }
 }

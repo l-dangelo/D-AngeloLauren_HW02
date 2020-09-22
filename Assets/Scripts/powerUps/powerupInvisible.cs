@@ -11,10 +11,15 @@ public class powerupInvisible : MonoBehaviour
     [SerializeField] GameObject _visualsToDisappear = null;
     [SerializeField] Material _originalMaterial = null;
     [SerializeField] Material _invisibleMaterial = null;
+    [SerializeField] ParticleSystem _particles = null;
 
     [Header("Ship Parts to Disappear")]
     [SerializeField] GameObject _pShip = null;
     [SerializeField] GameObject[] _children = null;
+
+    [Header("Audio")]
+    [SerializeField] AudioClip _winSound = null;
+    [SerializeField] float _volume = 0;
 
     Collider _colliderToDisappear = null;
 
@@ -22,6 +27,7 @@ public class powerupInvisible : MonoBehaviour
     {
         _colliderToDisappear = GetComponent<Collider>();
         EnableObject();
+        _particles.Pause();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -42,7 +48,11 @@ public class powerupInvisible : MonoBehaviour
 
     void ActivatePowerUp()
     {
-        _pShip.GetComponent<BoxCollider>().enabled = false;
+        _particles.Play();
+        _pShip.GetComponent<Collider>().enabled = false;
+
+        AudioHelper.PlayClip2D(_winSound, _volume);
+
         foreach (GameObject childObj in _children)
         {
             childObj.GetComponent<MeshRenderer>().material = _invisibleMaterial;
@@ -51,7 +61,7 @@ public class powerupInvisible : MonoBehaviour
 
     void DeactivatePowerUp()
     {
-        _pShip.GetComponent<BoxCollider>().enabled = true;
+        _pShip.GetComponent<Collider>().enabled = true;
         foreach (GameObject childObj in _children)
         {
             childObj.GetComponent<MeshRenderer>().material = _originalMaterial;
